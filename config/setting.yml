@@ -7,4 +7,4 @@ development:
   host: rails-dev.akoba.xyz  # 開発者ごとに変わるのは共通のファイルに書きたくない。データベースも同じか。
 
 production:
-  host: kyuuki-sample-taiten.herokuapp.com
+  host: sample-taiten.akoba.xyz
