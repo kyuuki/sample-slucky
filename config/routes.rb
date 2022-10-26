@@ -4,4 +4,18 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root 'static_page#root'
   # root to: 'static_page#root'  # 上記はこれの省略形
+
+  #
+  # ユーザー登録
+  #
+  get "users/sign_up", to: "registering_users#new"
+  get "users/confirm/:token", to: "registering_users#confirm", as: "users_confirm"
+  resources :registering_users, only: [ :create ]
+
+  #
+  # ログイン
+  #
+  get "users/log_in", to: "sessions#new"
+  post "users/log_in", to: "sessions#create"
+  get "users/log_out", to: "sessions#delete"
 end
