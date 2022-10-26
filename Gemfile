@@ -62,6 +62,10 @@ group :development do
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-rails_config", require: false
+
+  # メール
+  gem "letter_opener"
+  gem 'letter_opener_web'
 end
 
 group :test do
