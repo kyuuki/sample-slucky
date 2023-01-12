@@ -10,8 +10,8 @@ class RegisteringUsersController < ApplicationController
   def new
     # TODO: ログイン中は新規登録させない
 
-    @registering_user = RegisteringUser.new
     @registering_user_password = RegisteringUserPassword.new
+    # @registering_user_password.registering_user は特に作らなくても大丈夫そう
   end
 
   #
@@ -25,9 +25,10 @@ class RegisteringUsersController < ApplicationController
   # - パスワード認証にガチ依存してる
   #
   def create
-    @registering_user = RegisteringUser.new(registering_user_params)
+    # accepts_nested_attributes_for を使わないで一つずつ設定
     @registering_user_password = RegisteringUserPassword.new(registering_user_password_params)
-    @registering_user_password.registering_user = @registering_user
+    registering_user = RegisteringUser.new(registering_user_params)
+    @registering_user_password.registering_user = registering_user
 
     #
     # 既に登録済みのユーザーのメールアドレスをチェック
@@ -47,7 +48,7 @@ class RegisteringUsersController < ApplicationController
     #
     # TODO: ユーザー登録中チェックを先にすると起きない？
 
-    if not User.find_by(email: @registering_user.email).nil?
+    if not User.find_by(email: registering_user.email).nil?
       # Twitter でも同様のケースで「このメールアドレスは既に使われています。」と出るので、
       # 登録済みであることは通知して問題はなさそう
       flash.now[:alert] = "メールアドレスはすでに使われています。"
@@ -57,7 +58,7 @@ class RegisteringUsersController < ApplicationController
     end
 
     # ユーザー登録中のチェック
-    alreay_registering_user = RegisteringUser.find_by(email: @registering_user.email)
+    alreay_registering_user = RegisteringUser.find_by(email: registering_user.email)
 
     begin
       ActiveRecord::Base.transaction do
@@ -70,7 +71,7 @@ class RegisteringUsersController < ApplicationController
           alreay_registering_user.destroy!
         end
 
-        # (*1)
+        # autosave をつけないで子モデルのバリデーションをやるパターン
         # ユーザー登録中のチェックをしているので、RegisteringUser.email の一意性制約には引っかからないはず
         #if not @registering_user_password.registering_user.valid?
         #  logger.debug "@registering_user_password.registering_user is invalid"
@@ -78,14 +79,12 @@ class RegisteringUsersController < ApplicationController
         #end
 
         @registering_user_password.save!
-        # この書き方だと RegistratingUser (@registering_user_password.registering_user) のバリデーションは行われない
-        # モデルに autosave を入れる必要があり
         # https://mogulla3.tech/articles/2021-02-07-01
         # ↑によるとバリデーションエラーだと RegistratingUser は保存されず RegistratingUserPassword だけ保存しようとする (ただし、registrationg_user_id が nil なのでエラー)
-        # よって (*1) で別にバリデーション → autosave を入れればいらない？
+        # よって、モデルに autosave を入れる必要があり
 
         # トークン生成
-        token = RegisteringUserToken.create_and_return_token!(@registering_user)
+        token = RegisteringUserToken.create_and_return_token!(registering_user)
 
         #
         # メール送信
@@ -96,7 +95,7 @@ class RegisteringUsersController < ApplicationController
         # 超 TODO: メール配信サービスは別サーバーで一元管理し、その API を呼ぶかも
         # そこにメール配送履歴とかを全て保存するなどの機能を持たせる
         #
-        UserMailer.sign_up_confirm(@registering_user, token).deliver_now  # TODO: with 使うのと何が違うの？
+        UserMailer.sign_up_confirm(registering_user, token).deliver_now  # TODO: with 使うのと何が違うの？
       end
     rescue ActiveRecord::RecordInvalid => e  # バリデーションエラーのみ補足
       logger.fatal e.backtrace.join("\n")
@@ -181,13 +180,10 @@ class RegisteringUsersController < ApplicationController
 
   private
     def registering_user_params
-      params.require(:registering_user).permit(:email, :nickname)
+      params.require(:registering_user_password).require(:registering_user).permit(:email, :nickname)
     end
 
     def registering_user_password_params
-      # View で f.fields_for を使ってるのでネストして渡ってくる。
-      # View で fields_for を使ってネストさせないのもありかもしれない。
-      params.require(:registering_user)
-        .require(:registering_user_password).permit(:password, :password_confirmation)
+      params.require(:registering_user_password).permit(:password, :password_confirmation)
     end
 end
