@@ -104,7 +104,9 @@ class RegisteringUsersController < ApplicationController
     end
 
     # TODO: 確認メール送信は notice じゃなく、きちんと画面で説明した方がよい。
-    redirect_to root_path, notice: "確認メールが送信されました。"
+    #redirect_to root_path, notice: "確認メールが送信されました。"
+    flash.now[:notice] = "確認メールが送信されました。"
+    render :create
   end
 
   #

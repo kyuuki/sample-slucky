@@ -19,6 +19,14 @@ Rails.application.routes.draw do
   post "users/log_in", to: "sessions#create"
   get "users/log_out", to: "sessions#delete"
 
+  #
+  # Stripe 決済
+  #
+  get 'stripe', to: 'stripe#index'
+  get 'stripe/create-checkout-session', to: 'stripe#create'
+  get 'stripe/success', to: 'stripe#success'
+  post 'stripe/webhook', to: 'stripe#webhook'
+
   # https://github.com/fgrehm/letter_opener_web
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 end

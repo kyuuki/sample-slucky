@@ -20,12 +20,26 @@ class ApplicationController < ActionController::Base
     !!session[:user_id]
   end
 
-  def current_registrated_user
+  def current_user
     return nil if session[:user_id].nil?
 
     # ||=
     @current_user ||= User.find_by(id: session[:user_id])
 
     @current_user
+  end
+
+  def authenticate_registrated_user!
+    if not logged_in?
+      flash[:alert] = "ログインしてください。"
+      redirect_to users_log_in_url
+    end
+  end
+
+  # 課金ユーザーかどうか
+  def authenticate_paid_user!
+    # TODO: ユーザーの状態を確認
+    #flash[:alert] = "月額課金を登録してください。"
+    redirect_to stripe_url
   end
 end

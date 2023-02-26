@@ -1,0 +1,8 @@
+.row
+  .col-md-6.offset-md-3
+    .card
+      .card-body
+        p 会員ページにアクセスするには月額会員にご登録ください。
+        = link_to "月額会員に登録する", stripe_create_checkout_session_path, class: "btn btn-danger"
+        p.small 決済には Stripe を利用しています
+
