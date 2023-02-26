@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_26_021353) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_26_115253) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -39,12 +39,39 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_26_021353) do
     t.index ["email"], name: "index_registering_users_on_email", unique: true
   end
 
+  create_table "stripe_sessions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "session_identifier"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_stripe_sessions_on_user_id"
+  end
+
   create_table "user_password_authentications", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_user_password_authentications_on_user_id"
+  end
+
+  create_table "user_stripes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "stripe_customer_identifier"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_stripes_on_user_id"
+  end
+
+  create_table "user_valid_periods", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "starts_at"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_valid_periods_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -57,5 +84,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_26_021353) do
 
   add_foreign_key "registering_user_passwords", "registering_users"
   add_foreign_key "registering_user_tokens", "registering_users"
+  add_foreign_key "stripe_sessions", "users"
   add_foreign_key "user_password_authentications", "users"
+  add_foreign_key "user_stripes", "users"
+  add_foreign_key "user_valid_periods", "users"
 end

@@ -38,8 +38,18 @@ class ApplicationController < ActionController::Base
 
   # 課金ユーザーかどうか
   def authenticate_paid_user!
-    # TODO: ユーザーの状態を確認
-    #flash[:alert] = "月額課金を登録してください。"
-    redirect_to stripe_url
+    # 念のため
+    if not logged_in?
+      flash[:alert] = "ログインしてください。"
+      redirect_to users_log_in_url
+      return
+    end
+
+    # ユーザーの状態を確認
+    user_stripe = UserStripe.find_by(user_id: current_user.id)
+    if user_stripe.nil? || user_stripe.status != "subscription"
+      #flash[:alert] = "月額課金を登録してください。"
+      redirect_to stripe_url
+    end
   end
 end
