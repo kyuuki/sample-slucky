@@ -32,6 +32,14 @@ Rails.application.routes.draw do
   #
   get 'mypage', to: 'mypage#index'
 
+  #
+  # 管理画面
+  #
+  namespace 'admin' do
+    root to: 'root#index'
+    resources :users, only: [:index]
+  end
+
   # https://github.com/fgrehm/letter_opener_web
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 end
