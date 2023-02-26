@@ -1,0 +1,26 @@
+.row
+  .col
+    h2 マイページ
+    .form-horizontal
+      .form-group
+        label.col-sm-12.control-label メールアドレス
+        .col-sm-6
+          .form-control
+            = @user.email
+      .form-group
+        label.col-sm-12.control-label ニックネーム
+        .col-sm-6
+          .form-control
+            = @user.nickname
+      .form-group
+        label.col-sm-12.control-label ステータス
+        .col-sm-6
+          .form-control-plaintext
+            - if @user.user_stripe&.status == "subscription"
+              p 有料会員 (有効期間: xxx まで)
+            - else
+              p 無料会員
+              = link_to "月額会員に登録する", stripe_create_checkout_session_path, class: "btn btn-danger"
+    p 項目は仮です。
+
+    p この下に月額課金の結果をテーブルで。

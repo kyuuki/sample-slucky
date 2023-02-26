@@ -27,6 +27,11 @@ Rails.application.routes.draw do
   get 'stripe/success', to: 'stripe#success'
   post 'stripe/webhook', to: 'stripe#webhook'
 
+  #
+  # マイページ
+  #
+  get 'mypage', to: 'mypage#index'
+
   # https://github.com/fgrehm/letter_opener_web
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 end
