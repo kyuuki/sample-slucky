@@ -38,6 +38,13 @@ Rails.application.routes.draw do
   namespace 'admin' do
     root to: 'root#index'
     resources :users, only: [:index]
+
+    #
+    # ログイン
+    #
+    get "users/log_in", to: "sessions#new"
+    post "users/log_in", to: "sessions#create"
+    get "users/log_out", to: "sessions#delete"
   end
 
   # https://github.com/fgrehm/letter_opener_web

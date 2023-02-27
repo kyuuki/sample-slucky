@@ -24,7 +24,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <div class="wrapper">
   <%= render "layouts/admin/navbar" %>
   <% yield :menu_setting %>
-  <%= render "layouts/admin/main_sidebar", menu: @menu %>
+  <% unless @hide_sidebar %>
+    <%= render "layouts/admin/main_sidebar", menu: @menu %>
+  <% end %>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
