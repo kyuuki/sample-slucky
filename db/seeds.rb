@@ -5,3 +5,10 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+service = Service.create(name: "無料サイト")
+service = Service.create(name: "有料サイト (サブスク)")
+ServiceStripe.create(service: service, stripe_price_identifier: "price_1MgWIiFrpPMjGfXT3RItyb3z")
+service = Service.create(name: "有料サイト (買い切り)")
+
+admin_user = AdminUser.create(email: "admin@a.com", password: "adminadmin")

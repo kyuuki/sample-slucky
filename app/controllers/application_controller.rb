@@ -17,7 +17,11 @@ class ApplicationController < ActionController::Base
 
   def logged_in?
     # !!
-    !!session[:user_id]
+    #!!session[:user_id]
+
+    # TODO: Taiten にもバックポート
+    # セッションがおかしくなった場合は↑だとダメ
+    not current_user.nil?
   end
 
   def current_user
@@ -45,9 +49,17 @@ class ApplicationController < ActionController::Base
       return
     end
 
+    # TODO: 有効期限を見るように
     # ユーザーの状態を確認
-    user_stripe = UserStripe.find_by(user_id: current_user.id)
-    if user_stripe.nil? || user_stripe.status != "subscription"
+    service = Service.find_by(name: "有料サイト (サブスク)")
+    subscription = Subscription.find_by(user_id: current_user.id, service_id: service.id)
+    if subscription.nil?
+      redirect_to stripe_url
+      return
+    end
+
+    subscription_stripe = SubscriptionStripe.find_by(subscription_id: subscription.id)
+    if subscription_stripe.nil? || subscription_stripe.status != "subscription"
       #flash[:alert] = "月額課金を登録してください。"
       redirect_to stripe_url
     end

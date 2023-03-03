@@ -1,4 +1,5 @@
 class StaticPageController < ApplicationController
+  # TODO: 順序要確認
   before_action :authenticate_registrated_user!
   before_action :authenticate_paid_user!
 

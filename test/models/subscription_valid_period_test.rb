@@ -1,6 +1,6 @@
 require "test_helper"
 
-class UserStripeTest < ActiveSupport::TestCase
+class SubscriptionValidPeriodTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

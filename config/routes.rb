@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   get 'stripe', to: 'stripe#index'
   get 'stripe/create-checkout-session', to: 'stripe#create'
   get 'stripe/success', to: 'stripe#success'
+  get 'stripe/portal', to: 'stripe#portal'
   post 'stripe/webhook', to: 'stripe#webhook'
 
   #

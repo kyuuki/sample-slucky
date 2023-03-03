@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_27_032712) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_03_101319) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -47,6 +47,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_032712) do
     t.index ["email"], name: "index_registering_users_on_email", unique: true
   end
 
+  create_table "service_stripes", force: :cascade do |t|
+    t.bigint "service_id", null: false
+    t.string "stripe_price_identifier"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["service_id"], name: "index_service_stripes_on_service_id"
+  end
+
+  create_table "services", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "stripe_sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "session_identifier"
@@ -56,30 +70,39 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_032712) do
     t.index ["user_id"], name: "index_stripe_sessions_on_user_id"
   end
 
+  create_table "subscription_stripes", force: :cascade do |t|
+    t.bigint "subscription_id", null: false
+    t.string "stripe_customer_identifier"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["subscription_id"], name: "index_subscription_stripes_on_subscription_id"
+  end
+
+  create_table "subscription_valid_periods", force: :cascade do |t|
+    t.bigint "subscription_id", null: false
+    t.datetime "starts_at"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["subscription_id"], name: "index_subscription_valid_periods_on_subscription_id"
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "service_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["service_id"], name: "index_subscriptions_on_service_id"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "user_password_authentications", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_user_password_authentications_on_user_id"
-  end
-
-  create_table "user_stripes", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "stripe_customer_identifier"
-    t.string "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_user_stripes_on_user_id"
-  end
-
-  create_table "user_valid_periods", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.datetime "starts_at"
-    t.datetime "expires_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_user_valid_periods_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -92,8 +115,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_032712) do
 
   add_foreign_key "registering_user_passwords", "registering_users"
   add_foreign_key "registering_user_tokens", "registering_users"
+  add_foreign_key "service_stripes", "services"
   add_foreign_key "stripe_sessions", "users"
+  add_foreign_key "subscription_stripes", "subscriptions"
+  add_foreign_key "subscription_valid_periods", "subscriptions"
+  add_foreign_key "subscriptions", "services"
+  add_foreign_key "subscriptions", "users"
   add_foreign_key "user_password_authentications", "users"
-  add_foreign_key "user_stripes", "users"
-  add_foreign_key "user_valid_periods", "users"
 end

@@ -1,6 +1,6 @@
 FactoryBot.define do
-  factory :user_stripe do
-    user { nil }
+  factory :subscription_stripe do
+    subscription { nil }
     stripe_customer_identifier { "MyString" }
     status { "MyString" }
   end

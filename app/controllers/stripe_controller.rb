@@ -14,9 +14,7 @@ class StripeController < ApplicationController
 
   # 購入するボタン
   def create
-    prices = Stripe::Price.list(
-      expand: ["data.product"]
-    )
+    service = Service.find_by(name: "有料サイト (サブスク)")
 
     begin
       session = Stripe::Checkout::Session.create({
@@ -24,11 +22,12 @@ class StripeController < ApplicationController
         customer_email: current_user.email,
         line_items: [{
           quantity: 1,
-          price: prices.data[0].id
+          price: service.service_stripe.stripe_price_identifier
         }],
         subscription_data: {
           metadata: {
-            user_id: current_user.id
+            user_id: current_user.id,
+            service_id: service.id,
           }
         },
         #success_url: stripe_success_url(session_id: "{CHECKOUT_SESSION_ID}"),
@@ -58,6 +57,20 @@ class StripeController < ApplicationController
     redirect_to root_url
   end
 
+  def portal
+    service = Service.find_by(name: "有料サイト (サブスク)")
+    subscription = Subscription.find_by(user_id: current_user.id, service_id: service.id)
+    subscription_stripe = SubscriptionStripe.find_by(subscription_id: subscription.id)
+
+    session = Stripe::BillingPortal::Session.create(
+      {
+        customer: subscription_stripe.stripe_customer_identifier,
+        return_url: root_url
+      })
+
+    redirect_to session.url, allow_other_host: true
+  end
+
   def webhook
     webhook_secret = ""
     payload = request.body.read
@@ -85,26 +98,43 @@ class StripeController < ApplicationController
 
       stripe_customer_identifier = data_object["customer"]
       user_id = data_object["metadata"]["user_id"].to_i  # TODO: なかった場合のエラー処理
+      service_id = data_object["metadata"]["service_id"].to_i  # TODO: なかった場合のエラー処理
       puts stripe_customer_identifier
       puts user_id
+      puts service_id
 
       # TODO: created で作る？
       # TODO: User の存在チェック
       # TODO: Customer すでにある場合は？
       # TODO: いろいろチェックすること多い
-      user_stripe = UserStripe.find_or_create_by(user_id: user_id)
-      user_stripe.update(
+      subscription = Subscription.find_or_create_by(user_id: user_id, service_id: service_id)
+      subscription_stripe = SubscriptionStripe.find_or_create_by(subscription_id: subscription.id)
+      subscription_stripe.update(
         stripe_customer_identifier: stripe_customer_identifier,
         status: "subscription"
       )
-
-      # TODO: 有効期間を更新
     end
 
     if event.type == 'customer.subscription.created'
       # handle subscription created
       # puts data_object
       puts "Subscription created: #{event.id}"
+    end
+
+    if event.type == "invoice.paid"
+      # https://stripe.com/docs/api/invoices/line_item
+      line_item = data_object["lines"]["data"][0]
+      user_id = line_item["metadata"]["user_id"].to_i
+      service_id = data_object["metadata"]["service_id"].to_i  # TODO: なかった場合のエラー処理
+      period_start = Time.zone.at(line_item["period"]["start"].to_i)
+      period_end = Time.zone.at(line_item["period"]["end"].to_i)
+
+      subscription = Subscription.find_or_create_by(user_id: user_id, service_id: service_id)
+      subscription_stripe = SubscriptionStripe.find_or_create_by(subscription_id: subscription.id)
+
+      puts "Invoice paid: #{event.id}"
+      puts period_start
+      puts period_end
     end
 
     head :ok
