@@ -1,6 +1,8 @@
 .row
   .col
     h2 マイページ
+    hr
+    h3 会員情報
     .form-horizontal
       .form-group
         label.col-sm-12.control-label メールアドレス
@@ -19,12 +21,23 @@
             - service = Service.find_by(name: "有料サイト (サブスク)")
             - subscription = Subscription.find_by(user_id: current_user.id, service_id: service.id)
             - if not subscription.nil?
-              p 有料会員 (有効期間: xxx まで)
+              p
+                span.badge.badge-primary 有料会員
               = link_to "決済を管理する", stripe_portal_path, class: "btn btn-success"
             - else
-              p 無料会員
+              p
+                span.badge.badge-secondary 無料会員
               = link_to "月額会員に登録する", stripe_create_checkout_session_path, class: "btn btn-danger"
     p 項目は仮です。
-
-
-    p この下に月額課金の結果をテーブルで。
+    hr
+    h3 決済履歴
+    table.table.table-bordered
+      tr
+        th ID
+        th 開始日
+        th 終了日
+      - subscription.subscription_valid_periods.each do |subscription_valid_period|
+        tr
+          td = subscription_valid_period.id 
+          td = l subscription_valid_period.starts_at
+          td = l subscription_valid_period.expires_at

@@ -125,12 +125,20 @@ class StripeController < ApplicationController
       # https://stripe.com/docs/api/invoices/line_item
       line_item = data_object["lines"]["data"][0]
       user_id = line_item["metadata"]["user_id"].to_i
-      service_id = data_object["metadata"]["service_id"].to_i  # TODO: なかった場合のエラー処理
+      service_id = line_item["metadata"]["service_id"].to_i  # TODO: なかった場合のエラー処理
       period_start = Time.zone.at(line_item["period"]["start"].to_i)
       period_end = Time.zone.at(line_item["period"]["end"].to_i)
 
       subscription = Subscription.find_or_create_by(user_id: user_id, service_id: service_id)
       subscription_stripe = SubscriptionStripe.find_or_create_by(subscription_id: subscription.id)
+
+      # ユーザーが使える期間を延長
+      # ここは Stripe に依存しない
+      # TODO: いろいろチェックした方がよいかも (まずは Stripe 信じる)
+      SubscriptionValidPeriod.create(
+        subscription: subscription,
+        starts_at: period_start,
+        expires_at: period_end)
 
       puts "Invoice paid: #{event.id}"
       puts period_start
