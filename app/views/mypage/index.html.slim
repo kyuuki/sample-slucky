@@ -18,9 +18,8 @@
         label.col-sm-12.control-label ステータス
         .col-sm-6
           .form-control-plaintext
-            - service = Service.find_by(name: "有料サイト (サブスク)")
-            - subscription = Subscription.find_by(user_id: current_user.id, service_id: service.id)
-            - if not subscription.nil?
+            - service = Service.main
+            - if service.can_access?(current_user, Time.zone.now)
               p
                 span.badge.badge-primary 有料会員
               = link_to "決済を管理する", stripe_portal_path, class: "btn btn-success"
@@ -30,12 +29,13 @@
               = link_to "月額会員に登録する", stripe_create_checkout_session_path, class: "btn btn-danger"
     p 項目は仮です。
     hr
-    h3 決済履歴
+    h3 有効期限
     table.table.table-bordered
       tr
         th ID
         th 開始日
         th 終了日
+      - subscription = Subscription.find_by(user: current_user, service: service)
       - subscription.subscription_valid_periods.each do |subscription_valid_period|
         tr
           td = subscription_valid_period.id 

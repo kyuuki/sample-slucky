@@ -49,17 +49,9 @@ class ApplicationController < ActionController::Base
       return
     end
 
-    # TODO: 有効期限を見るように
     # ユーザーの状態を確認
-    service = Service.find_by(name: "有料サイト (サブスク)")
-    subscription = Subscription.find_by(user_id: current_user.id, service_id: service.id)
-    if subscription.nil?
-      redirect_to stripe_url
-      return
-    end
-
-    subscription_stripe = SubscriptionStripe.find_by(subscription_id: subscription.id)
-    if subscription_stripe.nil? || subscription_stripe.status != "subscription"
+    service = Service.main
+    unless service.can_access?(current_user, Time.zone.now)
       #flash[:alert] = "月額課金を登録してください。"
       redirect_to stripe_url
     end
