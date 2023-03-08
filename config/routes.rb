@@ -38,7 +38,7 @@ Rails.application.routes.draw do
   #
   namespace 'admin' do
     root to: 'root#index'
-    resources :users, only: [:index]
+    resources :users, only: [:index, :show]
 
     #
     # ログイン

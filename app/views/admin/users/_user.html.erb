@@ -1,8 +1,15 @@
 <tr>
-  <td><%= user.id %></td>
+  <td><%= link_to user.id, admin_user_path(user) %></td>
   <td><%= user.email %></td>
   <td><%= user.nickname %></td>
-
+  <td>
+    <% service = Service.main %>
+    <% if service.can_access?(user, Time.zone.now) %>
+      <span class="badge.badge-primary">有料会員</span>
+    <% else %>
+      <span class="badge.badge-secondary">無料会員</span>
+    <% end %>
+  </td>
   <td><%= l user.created_at %></td>
   <td><%= l user.updated_at %></td>
 </tr>
