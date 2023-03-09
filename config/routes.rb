@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   #
   # ログイン
   #
+  # users つけない方がいいかも
   get "users/log_in", to: "sessions#new"
   post "users/log_in", to: "sessions#create"
   get "users/log_out", to: "sessions#delete"
@@ -38,14 +39,16 @@ Rails.application.routes.draw do
   #
   namespace 'admin' do
     root to: 'root#index'
-    resources :users, only: [:index, :show]
-
     #
     # ログイン
     #
+    # users つけない方がいいかも
     get "users/log_in", to: "sessions#new"
     post "users/log_in", to: "sessions#create"
     get "users/log_out", to: "sessions#delete"
+
+    # 順番注意 /users/<log_in> で log_in が になる
+    resources :users, only: [:index, :show]
   end
 
   # https://github.com/fgrehm/letter_opener_web
