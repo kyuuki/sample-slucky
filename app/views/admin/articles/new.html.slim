@@ -1,0 +1,13 @@
+- content_for :title
+  | 記事新規登録
+
+- content_for :breadcrumb
+  <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active">記事新規登録</li>
+  </ol>
+
+- content_for :menu_setting
+  - @menu = :article
+
+= render 'form', article: @article

@@ -4,6 +4,7 @@ class StaticPageController < ApplicationController
   before_action :authenticate_paid_user!
 
   def root
+    @articles = Article.where(service: Service.main)
     # render :root  # これが省略されている
   end
 end

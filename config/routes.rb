@@ -49,6 +49,7 @@ Rails.application.routes.draw do
 
     # 順番注意 /users/<log_in> で log_in が になる
     resources :users, only: [:index, :show]
+    resources :articles
   end
 
   # https://github.com/fgrehm/letter_opener_web

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_03_101319) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_10_100709) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,6 +20,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_101319) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
+  end
+
+  create_table "articles", force: :cascade do |t|
+    t.bigint "service_id", null: false
+    t.string "title"
+    t.text "video_tag"
+    t.text "content"
+    t.integer "year"
+    t.integer "month"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["service_id"], name: "index_articles_on_service_id"
   end
 
   create_table "registering_user_passwords", force: :cascade do |t|
@@ -113,6 +125,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_101319) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "articles", "services"
   add_foreign_key "registering_user_passwords", "registering_users"
   add_foreign_key "registering_user_tokens", "registering_users"
   add_foreign_key "service_stripes", "services"

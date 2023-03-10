@@ -59,36 +59,31 @@
         <% if [ :user, :message, :inquiry ].include?(menu) %>
         <li class="nav-item menu-open">
         <% else %>
-        <li class="nav-item">
+        <li class="nav-item menu-open">
         <% end %>
-          <%= link_to "#", class: [ :user, :message, :inquiry ].include?(menu) ? "nav-link active" : "nav-link" do %>
+          <%= link_to "#", class: [ :user, :article ].include?(menu) ? "nav-link active" : "nav-link" do %>
             <i class="nav-icon fas fa-home"></i>
             <p>
-              Main
+              メイン
               <i class="right fas fa-angle-left"></i>
             </p>
           <% end %>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <%= link_to "/admin/users", class: menu == :user ? "nav-link active" : "nav-link" do %>
+              <%= link_to admin_users_path, class: menu == :user ? "nav-link active" : "nav-link" do %>
                 <i class="far fa-circle nav-icon"></i>
-                <p>User</p>
+                <p>ユーザー</p>
               <% end %>
             </li>
             <li class="nav-item">
-              <%= link_to "/admin/messages", class: menu == :message ? "nav-link active" : "nav-link" do %>
+              <%= link_to admin_articles_path, class: menu == :message ? "nav-link active" : "nav-link" do %>
                 <i class="far fa-circle nav-icon"></i>
-                <p>Message</p>
-              <% end %>
-            </li>
-            <li class="nav-item">
-              <%= link_to "/admin/inquiries", class: menu == :inquiry ? "nav-link active" : "nav-link" do %>
-                <i class="far fa-circle nav-icon"></i>
-                <p>Inquiry</p>
+                <p>記事</p>
               <% end %>
             </li>
           </ul>
         </li>
+        <!--
         <% if [ :registering_users, :registrated_users ].include?(menu) %>
         <li class="nav-item menu-open">
         <% else %>
@@ -116,6 +111,7 @@
             </li>
           </ul>
         </li>
+        -->
         <!--
         <li class="nav-item menu-open">
           <a href="#" class="nav-link active">

@@ -1,0 +1,53 @@
+<% content_for(:title, "記事一覧") %>
+
+<% content_for :breadcrumb do %>
+  <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active">記事一覧</li>
+  </ol>
+<% end %>
+
+<% content_for :menu_setting do %>
+  <% @menu = :article %>
+<% end %>
+
+<div class="row">
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <%= link_to new_admin_article_path do %>
+          新規作成
+        <% end %>
+      </div>
+      <div class="card-body">
+        <div class="mt-3">
+          <%#= paginate @users, views_prefix: "admin" %>
+        </div>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="width: 10px">ID</th>
+              <th>タイトル</th>
+              <th>内容</th>
+              <th style="width: 100px">年</th>
+              <th style="width: 100px">月</th>
+              <th>作成日時</th>
+              <th>更新日時</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <%= render @articles %>
+          </tbody>
+        </table>
+        <div class="mt-3">
+          <%#= paginate @users, views_prefix: "admin" %>
+        </div>
+      </div>
+    </div>      
+  </div>      
+
+</div>
+<!-- /.row -->
