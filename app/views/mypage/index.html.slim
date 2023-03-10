@@ -29,15 +29,16 @@
               = link_to "月額会員に登録する", stripe_create_checkout_session_path, class: "btn btn-danger"
     p 項目は仮です。
     hr
-    h3 有効期限
+    h3 決済履歴
     table.table.table-bordered
       tr
         th ID
-        th 開始日
-        th 終了日
+        th 有効期限 (開始日)
+        th 有効期限 (終了日)
       - subscription = Subscription.find_by(user: current_user, service: service)
-      - subscription.subscription_valid_periods.each do |subscription_valid_period|
-        tr
-          td = subscription_valid_period.id 
-          td = l subscription_valid_period.starts_at
-          td = l subscription_valid_period.expires_at
+      - unless subscription.nil?
+        - subscription.subscription_valid_periods.each do |subscription_valid_period|
+          tr
+            td = subscription_valid_period.id 
+            td = l subscription_valid_period.starts_at
+            td = l subscription_valid_period.expires_at
