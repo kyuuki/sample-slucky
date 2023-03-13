@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_10_100709) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_13_025310) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,6 +32,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_100709) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["service_id"], name: "index_articles_on_service_id"
+  end
+
+  create_table "password_resets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "token"
+    t.datetime "sent_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_password_resets_on_user_id"
   end
 
   create_table "registering_user_passwords", force: :cascade do |t|
@@ -126,6 +135,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_100709) do
   end
 
   add_foreign_key "articles", "services"
+  add_foreign_key "password_resets", "users"
   add_foreign_key "registering_user_passwords", "registering_users"
   add_foreign_key "registering_user_tokens", "registering_users"
   add_foreign_key "service_stripes", "services"

@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'password_resets/new'
+  get 'password_resets/create'
+  get 'password_resets/edit'
+  get 'password_resets/update'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -15,10 +19,22 @@ Rails.application.routes.draw do
   #
   # ログイン
   #
-  # users つけない方がいいかも
+  # users つけない方がいいかも。複数のログインとかあるシステムだと接頭辞ある方がいい
   get "users/log_in", to: "sessions#new"
   post "users/log_in", to: "sessions#create"
   get "users/log_out", to: "sessions#delete"
+
+  #
+  # パスワードリセット
+  #
+  # - edit, update の :id に当たる部分は token
+  #
+  #resources :password_resets, only: [:new, :create, :edit, :update]
+  # 無理やり感が強い。RESTful と勘違いしそう。
+  get "users/password_reset", to: "password_resets#new"
+  post "users/password_reset", to: "password_resets#create"
+  get "users/password_reset/input/:token", to: "password_resets#input", as: "users_password_reset_input"
+  post "users/password_reset/update", to: "password_resets#update"
 
   #
   # Stripe 決済
