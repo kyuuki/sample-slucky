@@ -7,4 +7,7 @@ class StaticPageController < ApplicationController
     @articles = Article.where(service: Service.main)
     # render :root  # これが省略されている
   end
+
+  def under
+  end
 end

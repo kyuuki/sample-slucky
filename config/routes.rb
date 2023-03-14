@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   root 'static_page#root'
   # root to: 'static_page#root'  # 上記はこれの省略形
 
+  get "under", to: "static_page#under"
+
   #
   # ユーザー登録
   #

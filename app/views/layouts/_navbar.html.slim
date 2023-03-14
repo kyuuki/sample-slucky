@@ -7,10 +7,19 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-success
 
     .collapse.navbar-collapse
       ul.navbar-nav.mr-auto
-        li.nav-item.active
+        /li.nav-item.active
           a.nav-link href="https://puchipuchi-happyisland.com/" ぷちぷちハッピー愛らんど
         /li.nav-item
-          a.nav-link href="https://belle-code.com/" べるこーど
+          a.nav-link href="https://luckiki-kun.com/" らっきっきくん
+        li.nav-item
+          = link_to("お知らせ", under_path, { class: "nav-link" })
+        - if logged_in?
+          li.nav-item
+            = link_to("#{current_user.nickname} さま専用", root_path, { class: "nav-link" })
+        li.nav-item
+          = link_to("お悩み回答", under_path, { class: "nav-link" })
+        li.nav-item
+          = link_to("匿名悩み相談", under_path, { class: "nav-link" })
       ul.navbar-nav
         - if logged_in?
           li.nav-item
