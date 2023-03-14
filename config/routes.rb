@@ -48,6 +48,11 @@ Rails.application.routes.draw do
   post 'stripe/webhook', to: 'stripe#webhook'
 
   #
+  # サービスページ
+  #
+  get 'services/:id', to: 'services#show'
+
+  #
   # マイページ
   #
   get 'mypage', to: 'mypage#index'

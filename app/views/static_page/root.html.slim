@@ -1,14 +1,13 @@
-h2 会員サロン
+h2 トップページ
 
-p TODO: まだ全部の記事を表示している。
+p 開発中のため、コンテンツなどは仮です。
 
-- @articles.each do |article|
-  h3 = article.title
+p テスト用に以下のメールアドレスでログインできます。
+ul
+  li mail: free@a.com / pass: aaaaaa (無料会員)
+  li mail: paid@a.com / pass: aaaaaa (有料会員)
 
-  p == article.video_tag
-
-  p = article.content
-
-  p = "#{article.year}/#{article.month}"
-
-  hr
+p 管理画面は以下から入ってください。
+ul
+  li = link_to "管理画面", admin_root_path
+  li mail: admin@a.com / pass: adminadmin

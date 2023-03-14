@@ -6,22 +6,22 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-service_free = Service.create(name: "無料サイト")
-service_sub = Service.create(name: "有料サイト (サブスク)")
+service_free = Service.create(id: 1, name: "無料サイト")
+service_sub = Service.create(id: 2, name: "有料サイト (サブスク)")
 ServiceStripe.create(service: service_sub, stripe_price_identifier: "price_1MgWIiFrpPMjGfXT3RItyb3z")
-service_one = Service.create(name: "有料サイト (買い切り)")
+service_one = Service.create(id: 3, name: "有料サイト (買い切り)")
 
 admin_user = AdminUser.create(email: "admin@a.com", password: "adminadmin")
 
 # 無料会員
-user = User.create(email: "free@a.com", nickname: "free")
+user = User.create(email: "free@a.com", nickname: "無料会員")
 user_password_authentication = UserPasswordAuthentication.create(
   user: user,
   password: "aaaaaa"
 )
 
 # 有料会員
-user = User.create(email: "paid@a.com", nickname: "paid")
+user = User.create(email: "paid@a.com", nickname: "有料会員")
 user_password_authentication = UserPasswordAuthentication.create(
   user: user,
   password: "aaaaaa"
