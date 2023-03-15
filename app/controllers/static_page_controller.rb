@@ -6,4 +6,7 @@ class StaticPageController < ApplicationController
 
   def under
   end
+
+  def copyright
+  end
 end
