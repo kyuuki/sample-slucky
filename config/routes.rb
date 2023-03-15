@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   # root to: 'static_page#root'  # 上記はこれの省略形
 
   get "under", to: "static_page#under"
+  get "copyright", to: "static_page#copyright"
 
   #
   # ユーザー登録
