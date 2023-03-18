@@ -182,7 +182,16 @@ class RegisteringUsersController < ApplicationController
 
   private
     def registering_user_params
-      params.require(:registering_user_password).require(:registering_user).permit(:email, :nickname)
+      params.require(:registering_user_password).require(:registering_user).permit(
+        :email,
+        :name,
+        :name_kana,
+        :phone_number,
+        :zipcode,
+        :prefecture_id,
+        :address,
+        :birthday
+      )
     end
 
     def registering_user_password_params

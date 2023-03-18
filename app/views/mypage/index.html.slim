@@ -5,30 +5,52 @@
     h3 会員情報
     .form-horizontal
       .form-group
-        label.col-sm-12.control-label メールアドレス
-        .col-sm-6
-          .form-control
-            = @user.email
+        label メールアドレス
+        .form-control.col-8
+          = @user.email
       .form-group
-        label.col-sm-12.control-label ニックネーム
-        .col-sm-6
-          .form-control
-            = @user.nickname
+        label 名前
+        .form-control.col-8
+          = @user.name
       .form-group
-        label.col-sm-12.control-label ステータス
-        .col-sm-6
-          .form-control-plaintext
-            - service = Service.main
-            - if service.can_access?(current_user, Time.zone.now)
-              p
-                span.badge.badge-primary 有料会員
-              = link_to "決済を管理する", stripe_portal_path, class: "btn btn-success"
-            - else
-              p
-                span.badge.badge-secondary 無料会員
-              = link_to "月額会員に登録する", stripe_create_checkout_session_path, class: "btn btn-danger"
-    p 項目は仮です。
+        label 名前（フリガナ）
+        .form-control.col-8
+          = @user.name_kana
+      .form-group
+        label 電話番号
+        .form-control.col-6
+          = @user.phone_number
+      .form-group
+        label 郵便番号
+        .form-control.col-4
+          = @user.zipcode
+      .form-group
+        label 都道府県
+        .form-control.col-3
+          = @user.prefecture.name
+      .form-group
+        label 住所
+        .form-control
+          = @user.address
+      .form-group
+        label 生年月日
+        .form-control
+          = @user.birthday
+      .form-group
+        label ステータス
+        .form-control-plaintext.col-sm-6
+          - service = Service.main
+          - if service.can_access?(current_user, Time.zone.now)
+            p
+              span.badge.badge-primary 有料会員
+            = link_to "決済を管理する", stripe_portal_path, class: "btn btn-success"
+          - else
+            p
+              span.badge.badge-secondary 無料会員
+            = link_to "月額会員に登録する", stripe_create_checkout_session_path, class: "btn btn-danger"
+
     hr
+
     h3 決済履歴
     table.table.table-bordered
       tr

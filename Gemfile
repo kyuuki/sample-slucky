@@ -80,3 +80,6 @@ gem "dotenv-rails"
 gem "slim-rails"
 gem "bcrypt"
 gem "stripe"
+
+# https://github.com/active-hash/active_hash
+gem "active_hash"
