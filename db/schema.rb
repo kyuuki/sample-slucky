@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_13_025310) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_18_110125) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,6 +65,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_13_025310) do
     t.string "nickname"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "name_kana"
+    t.string "phone_number"
+    t.string "zipcode"
+    t.integer "prefecture_id"
+    t.string "address"
+    t.date "birthday"
     t.index ["email"], name: "index_registering_users_on_email", unique: true
   end
 
@@ -131,6 +138,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_13_025310) do
     t.string "nickname"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "name_kana"
+    t.string "phone_number"
+    t.string "zipcode"
+    t.integer "prefecture_id"
+    t.string "address"
+    t.date "birthday"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

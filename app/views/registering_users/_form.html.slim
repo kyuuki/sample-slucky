@@ -11,28 +11,73 @@
     /= f.fields_for(:registering_user) do |ff|  // なぜかこれだと値が残らない (この省略形なくなったのかも)
     / https://railsguides.jp/form_helpers.html#%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E3%82%92%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB%E7%B5%90%E3%81%B3%E4%BB%98%E3%81%91%E3%82%8B-fields-for%E3%83%98%E3%83%AB%E3%83%91%E3%83%BC でもモデルをきちんと与えている
     = f.fields_for(:registering_user, @registering_user_password.registering_user) do |ff|
-      .form-group
-        = ff.label :email, "メールアドレス", class: "col-sm-12 control-label"
-        .col-sm-12
-          = ff.email_field :email, class: "form-control", required: true, placeholder: "xxx@sample.com", autocomplete: "email"
+      input type="hidden" class="p-country-name" value="Japan"
 
       .form-group
-        = ff.label :nickname, "ニックネーム", class: "col-sm-12 control-label"
-        .col-sm-12
-          = ff.text_field :nickname, class: "form-control", required: true, placeholder: "○○太郎"
+        = ff.label :email, "メールアドレス"
+        = ff.email_field :email, class: "form-control col-8", required: true, placeholder: "xxx@sample.com", autocomplete: "email"
+
+      .form-group
+        = ff.label :name, "名前"
+        = ff.text_field :name, class: "form-control col-8", required: true, autocomplete: "name"
+        / autocomple の値: https://developer.mozilla.org/ja/docs/Web/HTML/Attributes/autocomplete
+
+      .form-group
+        = ff.label :name_kana, "名前（フリガナ）"
+        = ff.text_field :name_kana, class: "form-control col-8", required: true
+
+      .form-group
+        = ff.label :phone_number, "電話番号"
+        = ff.text_field :phone_number, class: "form-control col-6", required: true, autocomplete: "tel"
+        small.form-text.text-muted ハイフン区切り (-) 不要
+
+      .form-group
+        = ff.label :zipcode, "郵便番号"
+        = ff.text_field :zipcode, class: "form-control col-4 p-postal-code", required: true, autocomplete: "postal-code"
+        small.form-text.text-muted ハイフン区切り (-) 不要
+
+      .form-group
+        = ff.label :prefecture_id, "都道府県"
+        = ff.collection_select :prefecture_id, Prefecture.all, :id, :name, {prompt: "-"}, {class: "form-control col-3 p-region-id", required: true}
+        / https://www.whizz-tech.co.jp/1843/
+
+      .form-group
+        = ff.label :address, "住所"
+        = ff.text_field :address, class: "form-control p-locality p-street-address", required: true, autocomplete: "street-address"
+
+      .form-group
+        = ff.label :birthday, "生年月日"
+        = ff.date_field :birthday, class: "form-control col-4", required: true, autocomplete: "bday"
+
+    .form-group
+      = f.label :password, "パスワード"
+      = f.password_field :password, class: "form-control col-8", required: true, placeholder: "xxxxxx（6 文字以上）", autocomplete: "new-password"
+
+    .form-group
+      = f.label :password_confirmation, "パスワード（確認入力）", class: "control-label"
+      = f.password_field :password_confirmation, class: "form-control col-8", required: true, placeholder: "xxxxxx（6 文字以上）", autocomplete: "new-password"
+
+    hr
+
+    .form-group.form-check
+      = f.check_box :check1, class: "form-check-input", required: true
+      = f.label :check1, "同意する", class: "form-check-label"
+      small.form-text.text-muted キャンセルポリシーについて同意の上、チェックしてください
+      .form-text = link_to "特定商取引法に基づく表記を表示する", "/under", target: "_blank"
+
+    .form-group.form-check
+      = f.check_box :check2, class: "form-check-input", required: true
+      = f.label :check2, "同意する", class: "form-check-label"
+      small.form-text.text-muted 個人情報の取扱いについて同意の上、チェックしてください
+      .form-text = link_to "個人情報保護方針を表示する", "/under", target: "_blank"
+
+    .form-group.form-check
+      = f.check_box :check3, class: "form-check-input", required: true
+      = f.label :check3, "同意する", class: "form-check-label"
+      small.form-text.text-muted 利用規約について同意の上、チェックしてください
+      .form-text = link_to "利用規約を表示する", "/under", target: "_blank"
 
     hr
 
     .form-group
-      = f.label :password, "パスワード", class: "col-sm-12 control-label"
-      .col-sm-12
-        = f.password_field :password, class: "form-control", required: true, placeholder: "xxxxxx（6 文字以上）", autocomplete: "new-password"
-
-    .form-group
-      = f.label :password_confirmation, "パスワード（確認入力）", class: "col-sm-12 control-label"
-      .col-sm-12
-        = f.password_field :password_confirmation, class: "form-control", required: true, placeholder: "xxxxxx（6 文字以上）", autocomplete: "new-password"
-
-    .form-group
-      .col-sm-offset-3.col-sm-3
-        = f.submit "新規登録", class: "btn btn-primary"
+      = f.submit "新規登録", class: "btn btn-primary col-4"
