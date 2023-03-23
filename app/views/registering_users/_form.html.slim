@@ -63,19 +63,19 @@
       = f.check_box :check1, class: "form-check-input", required: true
       = f.label :check1, "同意する", class: "form-check-label"
       small.form-text.text-muted キャンセルポリシーについて同意の上、チェックしてください
-      .form-text = link_to "特定商取引法に基づく表記を表示する", "/under", target: "_blank"
+      .form-text = link_to "特定商取引法に基づく表記を表示する", "/tokushoho", target: "_blank"
 
     .form-group.form-check
       = f.check_box :check2, class: "form-check-input", required: true
       = f.label :check2, "同意する", class: "form-check-label"
       small.form-text.text-muted 個人情報の取扱いについて同意の上、チェックしてください
-      .form-text = link_to "個人情報保護方針を表示する", "/under", target: "_blank"
+      .form-text = link_to "個人情報保護方針を表示する", "/privacy", target: "_blank"
 
     .form-group.form-check
       = f.check_box :check3, class: "form-check-input", required: true
       = f.label :check3, "同意する", class: "form-check-label"
       small.form-text.text-muted 利用規約について同意の上、チェックしてください
-      .form-text = link_to "利用規約を表示する", "/under", target: "_blank"
+      .form-text = link_to "利用規約を表示する", "/terms", target: "_blank"
 
     hr
 

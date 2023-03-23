@@ -14,14 +14,32 @@ service_one = Service.create(id: 3, name: "有料サイト (買い切り)")
 admin_user = AdminUser.create(email: "admin@a.com", password: "adminadmin")
 
 # 無料会員
-user = User.create(email: "free@a.com", nickname: "無料会員")
+user = User.create(
+  email: "free@a.com",
+  name: "山田無聊",
+  name_kana: "ヤマダムリョウ",
+  phone_number: "09099999999",
+  zipcode: "1111111",
+  prefecture_id: 1,
+  address: "住所",
+  birthday: "2000-01-01"
+)
 user_password_authentication = UserPasswordAuthentication.create(
   user: user,
   password: "aaaaaa"
 )
 
 # 有料会員
-user = User.create(email: "paid@a.com", nickname: "有料会員")
+user = User.create(
+  email: "paid@a.com",
+  name: "佐藤裕亮",
+  name_kana: "サトウユウリョウ",
+  phone_number: "09099999999",
+  zipcode: "1111111",
+  prefecture_id: 1,
+  address: "住所",
+  birthday: "2000-01-01"
+)
 user_password_authentication = UserPasswordAuthentication.create(
   user: user,
   password: "aaaaaa"

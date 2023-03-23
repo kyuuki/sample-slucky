@@ -9,4 +9,13 @@ class StaticPageController < ApplicationController
 
   def copyright
   end
+
+  def tokushoho
+  end
+
+  def privacy
+  end
+
+  def terms
+  end
 end
